@@ -24,4 +24,49 @@ public class ComprarController(ProductosClientService productos, IConfiguration 
         ViewBag.search = s;
         return View(lista);
     }
+
+    //Mostrar detalles en vez de comprar desde el index
+    public async Task <IActionResult> Detalle(int id)
+    {
+        Producto? item = null;
+        List <CarritoProducto>? productosCarrito = null;
+        ViewBag.Url = configuration["UrlWebAPI"];
+        ViewBag.EnCarrito = false;
+        try
+        {
+           item = await productos.GetAsync(id);
+           if (item == null) return NotFound();
+
+           productosCarrito = await productos.GetProductoCarritoAsync(id);
+           if (productosCarrito != null && productosCarrito.Count > 0)
+           {
+               ViewBag.EnCarrito = true;
+           }
+        
+        }
+        catch (HttpRequestException ex)
+        {
+            if (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                return RedirectToAction("Salir", "Auth");
+        }
+
+        return View(item);
+    }
+
+    //Agregar al carrito
+    [HttpPost]
+    public async Task<IActionResult> CarritoAsync(int id, int cantidad)
+    {
+        try
+        {
+            await productos.PostProductoCarritoAsync(id, cantidad);
+            return View("AgregadoCarrito");
+        }
+        catch (HttpRequestException ex)
+        {
+            if (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                return RedirectToAction("Salir", "Auth");
+        }
+        return RedirectToAction("Error", "Home");
+    }
 }

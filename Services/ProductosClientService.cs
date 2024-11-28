@@ -42,4 +42,17 @@ public class ProductosClientService(HttpClient client){
         var response = await client.DeleteAsync($"api/productos/{id}/categoria/{categoriaid}");
         response.EnsureSuccessStatusCode();
     }
+
+    public async Task<List<CarritoProducto>?> GetProductoCarritoAsync(int idProducto)
+    {
+        return await client.GetFromJsonAsync<List<CarritoProducto>?>($"api/carritos/{idProducto}");
+    }
+
+    public async Task PostProductoCarritoAsync(int idProducto, int cantidad)
+    {
+        var data = new { productoid = idProducto, cantidad = cantidad };
+
+        var response = await client.PostAsJsonAsync("api/carritos", data);
+        response.EnsureSuccessStatusCode();
+    }
 }
