@@ -1,0 +1,53 @@
+@model List<Compra>
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    @foreach (var item in Model)
+    {
+        if (item != null && item.Usuario != null)
+        {
+            <div class="col">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body m-3">
+                        <div class="row mb-1">
+                            <div class="col-4 d-flex align-items-center">
+                                <h6 class="mb-0">Compra ID:</h6>
+                                <div class="m-4 my-0">
+                                    <p class="mb-0">@Html.DisplayFor(modelItem => item.CompraId)</p>
+                                </div>
+                            </div>
+                            <div class="col-8 d-flex align-items-center">
+                                <h6 class="mb-0">Fecha de compra:</h6>
+                                <div class="m-4 my-0">
+                                    <p class="mb-0">@Html.DisplayFor(modelItem => item.FechaPedido)</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="fw-bold">Total de productos:</label>
+                                <p>@item.TotalProductos <span>productos</span></p>
+                                <label class="fw-bold">Total de compra:</label>
+                                <p>@item.TotalCosto</p>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="fw-bold">Correo del cliente:</label>
+                                <p>@item.Usuario.Email</p>
+                                <label class="fw-bold">Nombre del cliente:</label>
+                                <p>@item.Usuario.Nombre</p>
+                            </div>
+
+                            <div class="col-md-4 text-center">
+                                <p class="display-3 text-primary">
+                                    <i class="bi bi-box-seam-fill" style="width: 60px;"></i>
+                                </p>
+                                <a class="btn btn-primary w-75 rounded-pill" asp-action="Detalle" asp-route-id="@item.CompraId">Ver detalles</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

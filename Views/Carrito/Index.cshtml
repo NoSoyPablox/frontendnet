@@ -5,14 +5,74 @@
 
 <h2 class="text-center mb-3">@ViewData["Title"] <small class="text-muted fs-5">@ViewData["SubTitle"]</small></h2>
 
-<div class="row small mb-3">
-    <div class="col text-end">
-        Mostrando 0 elementos
-    </div>
+<div id="partial-carrito"></div>
+
+<!-- Mensaje de carrito vacío -->
+<div id="carrito-vacio" class="alert alert-info text-center shadow-sm p-4 rounded" style="display: none;">
+    <p class="mb-0">No hay productos en el carrito. <a href="@Url.Action("Index", "Tienda")" class="text-primary">Volver a la tienda</a></p>
 </div>
 
-<div class="mt-5">
-    <div class="alert alert-warning" role="alert">
-        No se han encontrado elementos. Intentelo de nuevo mas tarde.
-    </div>
+<!-- Mensaje de error -->
+<div id="mensaje-error" class="alert alert-danger text-center shadow-sm p-4 rounded" style="display: none;">
+    <p class="mb-0">Ocurrió un error inesperado. Inténtalo nuevamente más tarde.</p>
 </div>
+
+@section Scripts {
+    <script>
+        // Función para cargar el carrito
+        function cargarCarrito() {
+            $('#partial-carrito').load('/Carrito/CarritoComprasPartial', function (response, status) {
+                if (status === 'success' && $.trim(response).length === 0) {
+                    // Si el contenido parcial está vacío, muestra el mensaje de carrito vacío
+                    document.getElementById('carrito-vacio').style.display = 'block';
+                } else if (status === 'error') {
+                    // En caso de error en la carga, muestra el mensaje de error
+                    document.getElementById('mensaje-error').style.display = 'block';
+                } else {
+                    // Si hay contenido, oculta ambos mensajes
+                    document.getElementById('carrito-vacio').style.display = 'none';
+                    document.getElementById('mensaje-error').style.display = 'none';
+                }
+            });
+        }
+
+        // Llama a cargar el carrito al cargar la página
+        cargarCarrito();
+
+        // Evento para modificar productos
+        $(document).on('click', '.btn-modificar', function () {
+            const productoId = $(this).data('id');
+            const id = "cantidad-" + productoId;
+            let item = document.getElementById(id);
+            if (item) {
+                let num = parseInt(item.value);
+                if (num != null && num >= 1 && num <= 10) {
+                    modificarProducto(productoId, num);
+                }
+            }
+        });
+
+        // Función para modificar la cantidad de un producto
+        function modificarProducto(productoId, cantidad) {
+            $.ajax({
+                url: '/Carrito/Producto',
+                type: 'PUT',
+                data: { id: productoId, cantidad: cantidad },
+                success: function (response) {
+                    if (response.success) {
+                        cargarCarrito();
+                    } else if (response.redirectUrl) {
+                        window.location.href = response.redirectUrl;
+                    }
+                },
+                error: function () {
+                    // Muestra el mensaje de error directamente
+                    const mensajeError = document.getElementById('mensaje-error');
+                    if (mensajeError) {
+                        mensajeError.style.display = 'block';
+                    }
+                }
+            });
+        }
+    </script>
+}

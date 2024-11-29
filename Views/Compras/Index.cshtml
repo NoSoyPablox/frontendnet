@@ -1,0 +1,35 @@
+@model List<Compra>
+@{
+    ViewData["Title"] = "Compras";
+    ViewData["SubTitle"] = "Historial de compras";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb small">
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["SubTitle"]</li>
+    </ol>
+</nav>
+
+<h2 class="text-center mb-3">@ViewData["Title"] <small class="text-muted fs-5">@ViewData["SubTitle"]</small></h2>
+<div class="row small">
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3"></div>
+
+    <div class="row small mb-3">
+        <div class="col text-end">
+            Mostrando @Model.Count() elementos
+        </div>
+    </div>
+</div>
+
+@if (Model.Count() > 0)
+{
+    <partial name="_CardPartialCompra" model="Model" />
+}
+else
+{
+    <div class="mt-5">
+        <div class="alert alert-warning" role="alert">
+            No se han encontrado elementos. Inténtelo de nuevo más tarde.
+        </div>
+    </div>
+}

@@ -67,6 +67,7 @@ public class ComprarController(ProductosClientService productos, IConfiguration 
             if (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 return RedirectToAction("Salir", "Auth");
         }
+        //return View("AgregadoCarrito"); //Temporal para probar la ventana 
         return RedirectToAction("Error", "Home");
     }
 }

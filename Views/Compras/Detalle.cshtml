@@ -1,0 +1,80 @@
+@model Compra
+@{
+    ViewData["Title"] = "Compra";
+    ViewData["SubTitle"] = "Detalles de la compra";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb small">
+        <li class="breadcrumb-item"><a class="text-decoration-none" title="Regresar al listado"
+                asp-action="Index">Listado</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["SubTitle"]</li>
+    </ol>
+</nav>
+
+<h2 class="text-center mb-3">@ViewData["Title"] <small class="text-muted fs-5">@ViewData["SubTitle"]</small></h2>
+
+@if (Model != null && Model.CompraProducto != null && Model.Usuario != null )
+{
+   <div class="card mb-4 border-0 shadow">
+        <div class="card-header bg-primary text-white">
+            <h3 class="text-center">Detalles de la Compra</h3>
+        </div>
+        <div class="card-body">
+            <div class="d-flex flex-wrap justify-content-between mb-3">
+                <div class="d-flex flex-column align-items-start">
+                    <h5 class="fw-bold">Compra ID:</h5>
+                    <p class="mb-0">@Html.DisplayFor(modelItem => Model.CompraId)</p>
+                </div>
+                <div class="d-flex flex-column align-items-start">
+                    <h5 class="fw-bold">Fecha de compra:</h5>
+                    <p class="mb-0">@Html.DisplayFor(modelItem => Model.FechaPedido)</p>
+                </div>
+                <div class="d-flex flex-column align-items-start">
+                    <h5 class="fw-bold">Total de productos:</h5>
+                    <p>@Html.DisplayFor(modelItem => Model.TotalProductos) productos</p>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <div class="flex-fill me-3">
+                    <h5 class="fw-bold">Correo del cliente:</h5>
+                    <p>@Html.DisplayFor(modelItem => Model.Usuario.Email)</p>
+                </div>
+                <div class="flex-fill">
+                    <h5 class="fw-bold">Nombre del cliente:</h5>
+                    <p>@Html.DisplayFor(modelItem => Model.Usuario.Nombre)</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <h5 class="pt-3 pb-2 border-bottom">Productos de la compra</h5>
+            @if (Model.CompraProducto.Count() > 0)
+            {
+                <ul class="list-group list-group-flush">
+                    @foreach (var item in Model.CompraProducto)
+                    {
+                        if (item.Producto != null)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>
+                                    <strong>Título:</strong> @Html.DisplayFor(modelItem => item.Producto.Titulo) <br />
+                                    <small class="text-muted">@Html.DisplayFor(modelItem => item.Producto.Descripcion)</small>
+                                </span>
+                            </li>
+                        }
+                    }
+                </ul>
+            }
+            else
+            {
+                <div class="alert alert-warning mt-3" role="alert">
+                    No se han encontrado elementos. Inténtelo de nuevo más tarde.
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<div class="text-center mt-3">
+    <a class="btn btn-sm btn-outline-secondary" asp-action="Index" title="Cancelar">Cancelar</a>
+</div>

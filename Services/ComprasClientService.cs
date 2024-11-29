@@ -2,7 +2,7 @@ using frontendnet.Models;
 
 namespace frontendnet.Services;
 
-public class ComprassClientService (HttpClient client)
+public class ComprasClientService (HttpClient client)
 {
     public async Task<List<Compra>?> GetAsync()
     {
