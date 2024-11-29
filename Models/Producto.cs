@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Serialization;
 
 namespace frontendnet.Models;
 
@@ -13,14 +14,14 @@ public class Producto
 
     [Required(ErrorMessage = "El campo {0} es obligatorio.")]
     [DataType(DataType.MultilineText)]
-    public string Descripcion { get; set; } ="Sin descripción";
+    public string Descripcion { get; set; } = "Sin descripción";
 
     [Required(ErrorMessage = "El campo {0} es obligatorio.")]
     [DataType(DataType.Currency)]
-    [RegularExpression(@"^\d+.?\d{0,2}$", ErrorMessage = "El valor del campo debe ser un precio valido.")]
+    [RegularExpression(@"^\d+(\.\d{0,2})$", ErrorMessage = "El valor del campo debe ser un precio válido.")]
     [DisplayFormat(DataFormatString = "{0:C}", ApplyFormatInEditMode = false)]
     [Display(Name = "Precio")]
-    public decimal Precio {get; set;}
+    public decimal Precio { get; set; }
 
     [Display(Name = "Portada")]
     public int? ArchivoId { get; set; }
@@ -28,5 +29,5 @@ public class Producto
     [Display(Name = "Eliminable")]
     public bool Protegida { get; set; } = false;
 
-    public ICollection<Categoria> Categorias { get; set; }
+    public ICollection<Categoria>? Categorias { get; set; }
 }
