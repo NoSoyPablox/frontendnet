@@ -10,7 +10,7 @@
         <p class="card-text">@Model.Titulo</p>
         <h5 class="card-title">@Html.DisplayFor(model => model.Precio)</h5>
         <p class="card-text">
-            <@if (Model != null && Model.Categorias != null)
+            @if (Model != null && Model.Categorias != null && Model.Categorias.Count > 0)
             {
                 foreach (var cat in Model.Categorias)
                 {

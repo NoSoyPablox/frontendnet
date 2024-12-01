@@ -1,0 +1,43 @@
+@model CarritoProducto
+
+@{
+    ViewData["Title"] = "Eliminar Producto del Carrito";
+    ViewData["SubTitle"] = "Eliminar";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb small">
+        <li class="breadcrumb-item"><a class="text-decoration-none" title="Regresar al listado"
+                asp-action="Index">Listado</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["SubTitle"]</li>
+    </ol>
+</nav>
+
+<h4 class="text-center text-danger">@ViewData["Title"]</h4>
+<hr />
+
+<p class="text-center text-danger">¿Estás seguro de que deseas eliminar este producto de tu carrito?</p>
+
+<div class="card p-4 mx-auto" style="max-width: 500px;">
+    <div class="d-flex flex-column align-items-center">
+        <img src='@((Model.Producto.ArchivoId == null) ? "https://placehold.co/300x200/FFF/999?text=Artículo" : $"{ViewBag.Url}/api/archivos/{Model.Producto.ArchivoId}")'
+            class="img-fluid rounded mb-3" style="max-width: 200px;" />
+        <p class="fw-bold">@Model.Producto.Titulo</p>
+        <p class="text-muted">Precio: $@Model.Producto.Precio</p>
+        <p class="text-muted">Cantidad: @Model.Cantidad</p>
+    </div>
+</div>
+
+@if (ViewData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger text-center mt-3" role="alert">
+        @ViewData["ErrorMessage"]
+    </div>
+}
+
+<form method="post" asp-action="DeleteProducto" asp-route-id="@Model.ProductoId">
+    <div class="d-flex justify-content-between mt-4">
+        <a href="@Url.Action("Index", "Carrito")" class="btn btn-outline-secondary">Cancelar</a>
+        <button id="btnEnviar" type="submit" class="btn btn-danger">Eliminar</button>
+    </div>
+</form>

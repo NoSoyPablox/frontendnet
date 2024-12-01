@@ -23,20 +23,16 @@
         function cargarCarrito() {
             $('#partial-carrito').load('/Carrito/CarritoComprasPartial', function (response, status) {
                 if (status === 'success' && $.trim(response).length === 0) {
-                    // Si el contenido parcial está vacío, muestra el mensaje de carrito vacío
                     document.getElementById('carrito-vacio').style.display = 'block';
                 } else if (status === 'error') {
-                    // En caso de error en la carga, muestra el mensaje de error
                     document.getElementById('mensaje-error').style.display = 'block';
                 } else {
-                    // Si hay contenido, oculta ambos mensajes
                     document.getElementById('carrito-vacio').style.display = 'none';
                     document.getElementById('mensaje-error').style.display = 'none';
                 }
             });
         }
 
-        // Llama a cargar el carrito al cargar la página
         cargarCarrito();
 
         // Evento para modificar productos

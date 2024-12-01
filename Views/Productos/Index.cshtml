@@ -76,10 +76,25 @@
                             @Html.DisplayFor(modelItem => item.Titulo)<br />
                             <span class="text-secondary-emphasis small d-none d-md-block">@Html.DisplayFor(modelItem =>
                         item.Descripcion)</span><br />
-                            @foreach (var cat in item.Categorias!)
+                            @if (item.Categorias != null && item.Categorias.Any())
+                        {
+                            @foreach (var cat in item.Categorias)
                             {
-                                <span class="badge rounded-pill text-bg-secondary">@cat.Nombre</span>
+                                if (cat != null)
+                                {
+                                    <span class="badge rounded-pill text-bg-secondary">@cat.Nombre</span>
+                                }
+                                else
+                                {
+                                    <span class="badge rounded-pill text-bg-secondary">Sin categoría</span>
+                                }
                             }
+                        }
+                        else
+                        {
+                            <span class="badge rounded-pill text-bg-secondary">No tiene categorías</span>
+                        }
+
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Precio)
