@@ -18,13 +18,23 @@
 
 <p class="text-center text-danger">¿Estás seguro de que deseas eliminar este producto de tu carrito?</p>
 
-<div class="card p-4 mx-auto" style="max-width: 500px;">
-    <div class="d-flex flex-column align-items-center">
-        <img src='@((Model.Producto.ArchivoId == null) ? "https://placehold.co/300x200/FFF/999?text=Artículo" : $"{ViewBag.Url}/api/archivos/{Model.Producto.ArchivoId}")'
-            class="img-fluid rounded mb-3" style="max-width: 200px;" />
-        <p class="fw-bold">@Model.Producto.Titulo</p>
-        <p class="text-muted">Precio: $@Model.Producto.Precio</p>
-        <p class="text-muted">Cantidad: @Model.Cantidad</p>
+<div class="card p-4 mx-auto" style="max-width: 700px;">
+    <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+            <img src='@((Model.Producto.ArchivoId == null) ? "https://placehold.co/300x200/FFF/999?text=Artículo" : $"{ViewBag.Url}/api/archivos/{Model.Producto.ArchivoId}")'
+                class="img-fluid rounded me-3" style="max-width: 150px;" />
+            <div>
+                <p class="fw-bold mb-1">@Model.Producto.Titulo</p>
+                <p class="text-muted mb-0">Cantidad: @Model.Cantidad</p>
+            </div>
+        </div>
+
+        <form method="post" asp-action="DeleteProducto" asp-route-id="@Model.ProductoId">
+            <div class="d-flex flex-column">
+                <a href="@Url.Action("Index", "Carrito")" class="btn btn-outline-secondary mb-2">Cancelar</a>
+                <button id="btnEnviar" type="submit" class="btn btn-danger">Eliminar</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -34,10 +44,3 @@
         @ViewData["ErrorMessage"]
     </div>
 }
-
-<form method="post" asp-action="DeleteProducto" asp-route-id="@Model.ProductoId">
-    <div class="d-flex justify-content-between mt-4">
-        <a href="@Url.Action("Index", "Carrito")" class="btn btn-outline-secondary">Cancelar</a>
-        <button id="btnEnviar" type="submit" class="btn btn-danger">Eliminar</button>
-    </div>
-</form>
