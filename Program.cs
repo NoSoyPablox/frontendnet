@@ -5,55 +5,155 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Agregamos los servicios
+// Agregamos los servicios
 builder.Services.AddControllersWithViews();
 
-//Soporte para consultar el API
+// Soporte para consultar el API
 var UrlWebAPI = builder.Configuration["UrlWebAPI"];
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<EnviaBearerDelegatingHandler>();
 builder.Services.AddTransient<RefrescaTokenDelegatingHandler>();
 
-builder.Services.AddHttpClient<AuthClientService>(httpClient => { httpClient.BaseAddress = new Uri(UrlWebAPI!); });
+// Configuración de HttpClient para cada servicio con soporte para certificados autofirmados
+builder.Services.AddHttpClient<AuthClientService>(httpClient =>
+{
+    httpClient.BaseAddress = new Uri(UrlWebAPI!);
+})
+.ConfigurePrimaryHttpMessageHandler(() =>
+{
+    var handler = new HttpClientHandler();
+    handler.ServerCertificateCustomValidationCallback = 
+        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+    return handler;
+});
 
-builder.Services.AddHttpClient<CategoriasClientService>(httpClient => { httpClient.BaseAddress = new Uri(UrlWebAPI!); })
-    .AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
-    .AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
-
-builder.Services.AddHttpClient<UsuariosClientService>(httpClient => { httpClient.BaseAddress = new Uri(UrlWebAPI!); })
-    .AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
-    .AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
-
-builder.Services.AddHttpClient<RolesClientService>(httpClient => { httpClient.BaseAddress = new Uri(UrlWebAPI!); })
-    .AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
-    .AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
-
-builder.Services.AddHttpClient<ProductosClientService>(httpClient => { httpClient.BaseAddress = new Uri(UrlWebAPI!); })
-    .AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
-    .AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
-
-builder.Services.AddHttpClient<PerfilClientService>(httpClient => { httpClient.BaseAddress = new Uri(UrlWebAPI!); })
-    .AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
-    .AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
-
-builder.Services.AddHttpClient<ArchivosClientService>(httpClient => { httpClient.BaseAddress = new Uri(UrlWebAPI!); })
-    .AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
-    .AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
-
-builder.Services.AddHttpClient<BitacoraClientService>(httpClient => { httpClient.BaseAddress = new Uri(UrlWebAPI!); })
-    .AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
-    .AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
-
-builder.Services.AddHttpClient<CarritosClientService>(httpClient => { httpClient.BaseAddress = new Uri(UrlWebAPI!); })
+builder.Services.AddHttpClient<CategoriasClientService>(httpClient =>
+{
+    httpClient.BaseAddress = new Uri(UrlWebAPI!);
+})
+.ConfigurePrimaryHttpMessageHandler(() =>
+{
+    var handler = new HttpClientHandler();
+    handler.ServerCertificateCustomValidationCallback =
+        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+    return handler;
+})
 .AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
 .AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
 
-
-builder.Services.AddHttpClient<ComprasClientService>(httpClient => { httpClient.BaseAddress = new Uri(UrlWebAPI!); })
+builder.Services.AddHttpClient<UsuariosClientService>(httpClient =>
+{
+    httpClient.BaseAddress = new Uri(UrlWebAPI!);
+})
+.ConfigurePrimaryHttpMessageHandler(() =>
+{
+    var handler = new HttpClientHandler();
+    handler.ServerCertificateCustomValidationCallback =
+        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+    return handler;
+})
 .AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
 .AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
 
-//Soporte para cookie auth
+builder.Services.AddHttpClient<RolesClientService>(httpClient =>
+{
+    httpClient.BaseAddress = new Uri(UrlWebAPI!);
+})
+.ConfigurePrimaryHttpMessageHandler(() =>
+{
+    var handler = new HttpClientHandler();
+    handler.ServerCertificateCustomValidationCallback =
+        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+    return handler;
+})
+.AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
+.AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
+
+builder.Services.AddHttpClient<ProductosClientService>(httpClient =>
+{
+    httpClient.BaseAddress = new Uri(UrlWebAPI!);
+})
+.ConfigurePrimaryHttpMessageHandler(() =>
+{
+    var handler = new HttpClientHandler();
+    handler.ServerCertificateCustomValidationCallback =
+        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+    return handler;
+})
+.AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
+.AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
+
+builder.Services.AddHttpClient<PerfilClientService>(httpClient =>
+{
+    httpClient.BaseAddress = new Uri(UrlWebAPI!);
+})
+.ConfigurePrimaryHttpMessageHandler(() =>
+{
+    var handler = new HttpClientHandler();
+    handler.ServerCertificateCustomValidationCallback =
+        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+    return handler;
+})
+.AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
+.AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
+
+builder.Services.AddHttpClient<ArchivosClientService>(httpClient =>
+{
+    httpClient.BaseAddress = new Uri(UrlWebAPI!);
+})
+.ConfigurePrimaryHttpMessageHandler(() =>
+{
+    var handler = new HttpClientHandler();
+    handler.ServerCertificateCustomValidationCallback =
+        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+    return handler;
+})
+.AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
+.AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
+
+builder.Services.AddHttpClient<BitacoraClientService>(httpClient =>
+{
+    httpClient.BaseAddress = new Uri(UrlWebAPI!);
+})
+.ConfigurePrimaryHttpMessageHandler(() =>
+{
+    var handler = new HttpClientHandler();
+    handler.ServerCertificateCustomValidationCallback =
+        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+    return handler;
+})
+.AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
+.AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
+
+builder.Services.AddHttpClient<CarritosClientService>(httpClient =>
+{
+    httpClient.BaseAddress = new Uri(UrlWebAPI!);
+})
+.ConfigurePrimaryHttpMessageHandler(() =>
+{
+    var handler = new HttpClientHandler();
+    handler.ServerCertificateCustomValidationCallback =
+        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+    return handler;
+})
+.AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
+.AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
+
+builder.Services.AddHttpClient<ComprasClientService>(httpClient =>
+{
+    httpClient.BaseAddress = new Uri(UrlWebAPI!);
+})
+.ConfigurePrimaryHttpMessageHandler(() =>
+{
+    var handler = new HttpClientHandler();
+    handler.ServerCertificateCustomValidationCallback =
+        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+    return handler;
+})
+.AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
+.AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
+
+// Soporte para cookie auth
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -66,7 +166,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 var app = builder.Build();
 
-//Agregamos un middleware para el manejo de errores
+// Agregamos un middleware para el manejo de errores
 app.UseExceptionHandler("/Home/Error");
 
 app.UseStaticFiles();
