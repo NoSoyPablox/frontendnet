@@ -72,11 +72,14 @@
                     }
                 }
                 <hr class="w-100 my-3" />
-                @if (Model[0] != null)
+                @if (Model.Any())
                 {
+                    var totalPrecio = Model.Sum(item => item.TotalPrecio);
                     <div class="d-flex justify-content-between w-100 mb-4">
                         <p class="fw-bold">Total</p>
-                        <p class="fw-bold">$@Html.DisplayFor(modelItem => Model[0].TotalPrecio)</p>
+                        <p class="fw-bold">
+                            $@String.Format("{0:#,0.00}", totalPrecio)
+                        </p>
                     </div>
                     <form class="w-100 text-center">
                         <button type="submit" class="btn btn-primary w-75 rounded-pill">Comprar ahora</button>
@@ -106,8 +109,10 @@
             let num = parseInt(item.value);
             if (!isNaN(num)) {
                 item.value = num + 1;
+                modificarProducto(idproducto, num + 1); // Llamada AJAX
             } else {
                 item.value = 1;
+                modificarProducto(idproducto, 1);
             }
         }
     }
@@ -119,9 +124,27 @@
             let num = parseInt(item.value);
             if (!isNaN(num) && num > 1) {
                 item.value = num - 1;
-            } else {
-                item.value = 1;
+                modificarProducto(idproducto, num - 1); // Llamada AJAX
             }
         }
+    }
+
+    function modificarProducto(productoId, cantidad) {
+        $.ajax({
+            url: '/Carrito/Producto', // Ajusta la URL si es necesario
+            type: 'PUT',
+            data: { id: productoId, cantidad: cantidad },
+            success: function (response) {
+                if (response.success) {
+                    cargarCarrito(); // Recarga el carrito (opcional)
+                } else if (response.redirectUrl) {
+                    window.location.href = response.redirectUrl;
+                }
+            },
+            error: function () {
+                // Manejo de error
+                alert("Ocurrió un error al actualizar el producto.");
+            }
+        });
     }
 </script>
